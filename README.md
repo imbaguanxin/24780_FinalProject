@@ -85,7 +85,12 @@ git push --set-upstream origin your_branch
 
   * wait for someone (could be you, but better not you) to review the code and merge to the main. You can do code review for your friends and approve the merge on github repository page under `Pull requests`.
 
+
+
+Runpu Meng: runpum@andrew.cmu.edu
+
 Zongyuan Wu: zongyuaw@andrew.cmu.edu/zongyuanwu999@gmail.com
 
 Yu Qiu: cuttleqfish@gmail.com
+
 
