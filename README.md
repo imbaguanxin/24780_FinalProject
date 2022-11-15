@@ -85,7 +85,7 @@ git push --set-upstream origin your_branch
 
   * wait for someone (could be you, but better not you) to review the code and merge to the main. You can do code review for your friends and approve the merge on github repository page under `Pull requests`.
 
-
+## emails
 
 Runpu Meng: runpum@andrew.cmu.edu
 
@@ -96,3 +96,24 @@ Yu Qiu: cuttleqfish@gmail.com
 Xin guan: imbaguanxin@outlook.com
 
 Yu Wang: annawang.2123@gmail.com
+
+## working process brief
+
+1. git checkout main (回到主分支)
+2. git pull (同步最新)
+3. git checkout -b new_branch (开始新的分支)
+4. 写代码
+5. git add . / git commit
+6. 同步主分支的新信息
+```
+git checkout main (回到主分支)
+git pull (同步最新)
+git checkout new_branch (去你的分支)
+git merge main
+```
+7. 设置上行分支映射
+```
+git push -u origin new_branch:new_branch 
+git push --set-upstream origin your_branch
+```
+6. pull request (github 主页)
