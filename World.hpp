@@ -1,57 +1,69 @@
-#include "Hero.hpp"
-
 #ifndef STD_VECTOR_IS_INCLUDED
 #include <vector>
 #define STD_VECTOR_IS_INCLUDED
 #endif
 
-#include "Layer.hpp"
+enum HeroState
+{
+    onLand,
+    onAir,
+    charging,
+};
 
-enum HeroMoveDir {
-    moveLeft, moveRight
-}
+enum HeroMoveDir
+{
+    moveLeft,
+    moveRight
+};
+
+class Hero
+{
+public:
+    double x, y;
+    double vx, vy;
+    double radius;
+    HeroState heroState;
+};
+
+class Obstacle
+{
+protected:
+    // lower left position
+    double blx, bly;
+    double xlen, ylen;
+
+public:
+    Obstacle();
+    int GetX(void);
+    int GetY(void);
+    int GetXlen(void);
+    int GetYlen(void);
+    void Init(double X, double Y, double Width, double Height);
+};
+
+class Layer
+{
+public:
+    double xlen, ylen;
+    std::vector<Obstacle> obs_list;
+};
 
 class World
 {
-    public:
-        Hero hero;
-        std::vector<Layer> layer_list;
-        int current_layer;
+public:
+    Hero hero;
+    std::vector<Layer> layer_list;
+    int current_layer;
 
-        void move_hero(HeroMoveDir dir);
-        void jump_hero(double instensity, HeroMoveDir dir);
-        void next(double time_interval);
-    
-    protected:
-        // obstcle* binded_obstacle;
+    void MoveHero(HeroMoveDir dir);
+    void JumpHero(double instensity, HeroMoveDir dir);
+    void Next(double time_interval);
+
+protected:
+    // obstcle* binded_obstacle;
     // physical simulation
-        void check_hit(void);
-        void renew_layer(void);
+    void CheckHit(void);
+    void RenewLayer(void);
     // more functions here
     // TODO:
 };
-
-void World::next(double time_interval){
-    // update position of hero
-
-    // check if hero go to a new layer
-
-    // hit check with hero and obstacle
-    // if hit, change state of hero
-}
-
-void World::move_hero(HeroMoveDir dir) {
-
-}
-
-void World::jump_hero(double instensity, HeroMoveDir dir) {
-
-}
-
-void World::check_hit(void) {
-
-}
-
-void World::renew_layer(void) {
-
-}
