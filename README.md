@@ -116,4 +116,4 @@ git merge main
 git push -u origin new_branch:new_branch 
 git push --set-upstream origin your_branch
 ```
-6. pull request (github 主页)
+8. pull request (github 主页)

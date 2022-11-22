@@ -39,3 +39,19 @@ void World::next(double time_interval){
     // hit check with hero and obstacle
     // if hit, change state of hero
 }
+
+void World::move_hero(HeroMoveDir dir) {
+
+}
+
+void World::jump_hero(double instensity, HeroMoveDir dir) {
+
+}
+
+void World::check_hit(void) {
+
+}
+
+void World::renew_layer(void) {
+
+}
