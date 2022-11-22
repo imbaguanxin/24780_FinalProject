@@ -19,7 +19,7 @@ class World
         int current_layer;
 
         void move_hero(HeroMoveDir dir);
-        void jump_hero(double instensity, HeroMoveDir dir);
+        void jump_hero(double intensity, HeroMoveDir dir);
         void next(double time_interval);
     
     protected:
