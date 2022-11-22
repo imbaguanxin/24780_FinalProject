@@ -4,6 +4,7 @@
 #include <vector>
 #include "Hero.hpp"
 #include "Layer.hpp"
+#include "Obstacle.hpp"
 
 class World
 {
@@ -26,5 +27,6 @@ protected:
     // more functions here
     // TODO:
 };
+
 
 #endif /* World_hpp */
