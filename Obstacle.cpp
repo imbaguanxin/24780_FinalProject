@@ -2,11 +2,11 @@
 
 Obstacle::Obstacle()
 {
-    Init(0, 0, 0, 0);
+    Init(0, 0, 0, 0, 0);
 }
-Obstacle::Obstacle(double x, double y, double x_len, double y_len)
+Obstacle::Obstacle(double x, double y, double x_len, double y_len, int state_obs)
 {
-    Init(x, y, x_len, y_len);
+    Init(x, y, x_len, y_len, state_obs);
 }
 double Obstacle::GetX(void)
 {
@@ -24,10 +24,11 @@ double Obstacle::GetYlen(void)
 {
     return ylen;
 }
-void Obstacle::Init(double x, double y, double x_len, double y_len)
+void Obstacle::Init(double x, double y, double x_len, double y_len, int state_obs)
 {
     blx = x;
     bly = y;
     xlen = x_len;
     ylen = y_len;
+    state = state_obs;
 }

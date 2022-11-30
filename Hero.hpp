@@ -10,8 +10,9 @@ enum HeroState
 
 enum HeroMoveDir
 {
+    stand,
     moveLeft,
-    moveRight
+    moveRight,
 };
 
 class Hero
@@ -19,9 +20,14 @@ class Hero
 public:
     double x, y;
     double vx, vy;
+    double ay;
     double radius;
+    const double jumpSpeed = 10;
     HeroState heroState;
     HeroMoveDir heroDir;
+
+    Hero(void);
+    ~Hero(void);
 };
 
 #endif
