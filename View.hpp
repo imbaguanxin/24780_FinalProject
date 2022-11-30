@@ -4,7 +4,10 @@
 #include "World.hpp"
 #include "Controller.hpp"
 
+#ifndef CONST_EM_PI
+#define CONST_EM_PI
 const double EM_PI = 3.1415926535;
+#endif
 
 class View4Test
 {
