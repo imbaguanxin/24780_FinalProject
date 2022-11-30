@@ -1,0 +1,9 @@
+windowsize 1000 1000
+hero 20 11 1
+layersize 100 100
+totallayer 1
+layer 0
+obstacle 0 0 100 10
+obstacle 0 10 10 30
+obstacle 90 10 10 100
+obstacle 30 30 30 10

@@ -48,9 +48,6 @@ void View4Test::DrawObstacleOne(Obstacle &obs)
 
 void View4Test::DrawObstacles()
 {
-    // Left, top and right edge: call render(), bind with texture (https://learnopengl.com/Getting-started/Textures)
-    // Middle part: transparent block (alpha blending, lecture 6)
-    
     for (Obstacle obs : world.layer_list.at(world.current_layer).obs_list)
     {
         DrawObstacleOne(obs);
@@ -79,7 +76,7 @@ void View4Test::DrawUI()
     // Top layer texts that keep showing all the time in game
     // Introduction / Conclusion can be done later
     glColor3ub(0, 0, 0);
-    glRasterPos2d(5, 595); // TBD
+    glRasterPos2d(5, 25); // TBD
     char buffer[30];
     std::sprintf(buffer, "Current Layer: %d", world.current_layer);
     YsGlDrawFontBitmap16x20(buffer);
@@ -93,12 +90,11 @@ void View4Test::Render()
     DrawUI();
 }
 
-void View4Test::Next(double time_interval)
+void View4Test::Next(double time_interval, SpaceEvent se, HeroMoveDir dir, double intensity)
 {
-    world.Next(time_interval);
-}
-
-void View4Test::Init(World &w)
-{
-    world = w;
+    if (spacePressed == se && world.hero.heroState == onLand)
+    {
+        world.hero.heroState = charging;
+    }
+    world.Next(time_interval, dir, intensity);
 }

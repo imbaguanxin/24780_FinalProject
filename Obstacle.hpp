@@ -9,14 +9,14 @@ protected:
     double xlen, ylen;
 
 public:
+    int state;
     Obstacle();
-    Obstacle(double x, double y, double x_len, double y_len);
+    Obstacle(double x, double y, double x_len, double y_len, int state);
     double GetX(void);
     double GetY(void);
     double GetXlen(void);
     double GetYlen(void);
-    void Init(double x, double y, double x_len, double y_len);
+    void Init(double x, double y, double x_len, double y_len, int state_obs);
 };
 
 #endif
-

@@ -14,19 +14,20 @@ public:
     int current_layer;
     double layer_x_len, layer_y_len;
 
-    
-    void MoveHero(HeroMoveDir dir);
+    World(void);
+    ~World(void);
+    void MoveHeroOnLand(HeroMoveDir dir, double time_interval);
+    void MoveHeroOnAir(double time_interval);
     void JumpHero(double instensity, HeroMoveDir dir);
-    void Next(double time_interval);
+    void Next(double time_interval, HeroMoveDir dir, double intensity);
 
 protected:
-    // obstcle* binded_obstacle;
     // physical simulation
-    void CheckHit(void);
+    void CheckHitObstacle(void);
+    void CheckHitEdge(void);
     void RenewLayer(void);
     // more functions here
-    // TODO:
+    void CheckDropObstacle(void);
 };
-
 
 #endif /* World_hpp */
