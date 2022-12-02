@@ -202,10 +202,16 @@ void main4Texture()
     ViewTexture v;
 
     CreateViewTexture(v, "config.txt");
-    TextureData texD(1);
+    TextureData texD(3);
     v.texData = &texD;
-    v.texData->decoders[0].Decode("grass.png");
-    float color[4] = {1.0, 1.0, 1.0, 1.0};
+    v.texData->decoders[0].Decode("grass3.png");
+    v.texData->decoders[1].Decode("background2.png");
+    v.texData->decoders[2].Decode("foreground2.png");
+    float color[] = {
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0
+    };
     v.texData->setRGBA(color);
 
     auto now = std::chrono::system_clock::now();
@@ -218,6 +224,7 @@ void main4Texture()
     FsOpenWindow(16, 16, v.window_x_len, v.window_y_len, 1);
 
     Controller c;
+    v.InitTexture();
     while (!c.isGameEnd())
     {
         auto next_now = std::chrono::system_clock::now();
