@@ -36,6 +36,7 @@ void ViewTexture::Cleanup()
 void ViewTexture::InitTexture()
 {
     int rgba_idx = 0;
+    printf("texdata size: %d\n", texData->size);
     for (int i = 0; i < texData->size; ++i)
     {
         rgba_idx = i * 4;
@@ -44,8 +45,8 @@ void ViewTexture::InitTexture()
                   texData->rgba[rgba_idx + 1],
                   texData->rgba[rgba_idx + 2],
                   texData->rgba[rgba_idx + 3]);
-        glGenTextures(1, &texData->texIds[0]);
-        glBindTexture(GL_TEXTURE_2D, texData->texIds[0]);
+        glGenTextures(1, &texData->texIds[i]);
+        glBindTexture(GL_TEXTURE_2D, texData->texIds[i]);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -54,22 +55,34 @@ void ViewTexture::InitTexture()
         glTexImage2D(GL_TEXTURE_2D,
                      0,
                      GL_RGBA,
-                     texData->decoders[0].wid,
-                     texData->decoders[0].hei,
+                     texData->decoders[i].wid,
+                     texData->decoders[i].hei,
                      0,
                      GL_RGBA,
                      GL_UNSIGNED_BYTE,
-                     texData->decoders[0].rgba);
+                     texData->decoders[i].rgba);
     }
 
     glEnable(GL_TEXTURE_2D); // Begin using texture mapping
 }
 
+void ViewTexture::DrawTransparent(double x[], double y[], double rgba[])
+{
+    glBegin(GL_QUADS);
+    glColor4ub(128, 128, 128, 255);
+    glVertex2d(x[0], y[0]);
+    glVertex2d(x[1], y[1]);
+    glVertex2d(x[2], y[2]);
+    glVertex2d(x[3], y[3]);
+    glEnd();
+//    glDisable(GL_BLEND);
+}
+
 void ViewTexture::DrawQuadTex(double x[], double y[], int texId, double rgba[])
 {
-
     glBindTexture(GL_TEXTURE_2D, texData->texIds[0]);
     glBegin(GL_QUADS);
+    glColor4d(1.0, 1.0, 1.0, 1.0);
     glTexCoord2d(0.0, 0.0); // top part
     glVertex2d(x[0], y[0]); // w2cx, w2cy+y-1
     glTexCoord2d(1.0, 0.0);
@@ -83,24 +96,67 @@ void ViewTexture::DrawQuadTex(double x[], double y[], int texId, double rgba[])
 
 void ViewTexture::DrawBackground(int texId)
 {
-    // PNG (yspng) OR draw by OpenGL (shapes and fill with color) (2D first, 3D maybe later)
-    // Bottom animation at the start line
+    glBindTexture(GL_TEXTURE_2D, texData->texIds[1]);
+    glBegin(GL_QUADS);
+    glColor4d(1.0, 1.0, 1.0, 1.0);
+    glTexCoord2d(0.0, 0.0);
+    glVertex2d(0, 0);
+    glTexCoord2d(1.0, 0.0);
+    glVertex2d(window_x_len, 0); // window size
+    glTexCoord2d(1.0, 1.0);
+    glVertex2d(window_x_len, window_y_len); // window size
+    glTexCoord2d(0.0, 1.0);
+    glVertex2d(0, window_y_len); // window size
+    glEnd();
 }
 
 void ViewTexture::DrawObstacleOne(Obstacle &obs, int texId)
 {
-    double x[4] = {
+    double x_in[4] = {
+        W2CX(obs.GetX() + 0.5),
+        W2CX(obs.GetX() + obs.GetXlen() - 0.5),
+        W2CX(obs.GetX() + obs.GetXlen() - 0.5),
+        W2CX(obs.GetX() + 0.5)};
+    double y_in[4] = {
+        W2CY(obs.GetY()),
+        W2CY(obs.GetY()),
+        W2CY(obs.GetY() + obs.GetYlen() - 0.5),
+        W2CY(obs.GetY() + obs.GetYlen() - 0.5)};
+    double x_left[4] = {
+        W2CX(obs.GetX()),
+        W2CX(obs.GetX() + 0.5),
+        W2CX(obs.GetX() + 0.5),
+        W2CX(obs.GetX())};
+    double y_left[4] = {
+        W2CY(obs.GetY()),
+        W2CY(obs.GetY()),
+        W2CY(obs.GetY() + obs.GetYlen() - 0.5),
+        W2CY(obs.GetY() + obs.GetYlen() - 0.5)};
+    double x_right[4] = {
+        W2CX(obs.GetX() + obs.GetXlen() - 0.5),
+        W2CX(obs.GetX() + obs.GetXlen()),
+        W2CX(obs.GetX() + obs.GetXlen()),
+        W2CX(obs.GetX() + obs.GetXlen() - 0.5)};
+    double y_right[4] = {
+        W2CY(obs.GetY()),
+        W2CY(obs.GetY()),
+        W2CY(obs.GetY() + obs.GetYlen() - 0.5),
+        W2CY(obs.GetY() + obs.GetYlen() - 0.5)};
+    double x_top[4] = {
         W2CX(obs.GetX()),
         W2CX(obs.GetX() + obs.GetXlen()),
         W2CX(obs.GetX() + obs.GetXlen()),
         W2CX(obs.GetX())};
-    double y[4] = {
-        W2CY(obs.GetY()),
-        W2CY(obs.GetY()),
+    double y_top[4] = {
+        W2CY(obs.GetY() + obs.GetYlen() - 0.5),
+        W2CY(obs.GetY() + obs.GetYlen() - 0.5),
         W2CY(obs.GetY() + obs.GetYlen()),
         W2CY(obs.GetY() + obs.GetYlen())};
     double rgba[4] = {1.0, 1.0, 1.0, 1.0};
-    DrawQuadTex(x, y, 0, rgba);
+    DrawQuadTex(x_left, y_left, 0, rgba);
+    DrawQuadTex(x_right, y_right, 0, rgba);
+    DrawQuadTex(x_top, y_top, 0, rgba);
+    DrawTransparent(x_in, y_in, rgba);
 }
 
 void ViewTexture::DrawObstacles(void)
@@ -117,6 +173,22 @@ void ViewTexture::DrawHero()
     // Draw externally and load from PNG (6 states) OR draw by OpenGL (texture) (quite complicated)
 }
 
+void ViewTexture::DrawForeground()
+{
+    glBindTexture(GL_TEXTURE_2D, texData->texIds[2]);
+    glBegin(GL_QUADS);
+    glColor4d(1.0, 1.0, 1.0, 1.0);
+    glTexCoord2d(0.0, 0.0);
+    glVertex2d(0, 0);
+    glTexCoord2d(1.0, 0.0);
+    glVertex2d(window_x_len, 0); // window size
+    glTexCoord2d(1.0, 1.0);
+    glVertex2d(window_x_len, window_y_len); // window size
+    glTexCoord2d(0.0, 1.0);
+    glVertex2d(0, window_y_len); // window size
+    glEnd();
+}
+
 void ViewTexture::DrawUI()
 {
     // Top layer texts that keep showing all the time in game
@@ -130,11 +202,15 @@ void ViewTexture::DrawUI()
 
 void ViewTexture::Render()
 {
-    InitTexture();
-    //    DrawBackground(0);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+//    InitTexture();
+    DrawBackground(0);
     DrawObstacles();
     //    DrawHero();
-    DrawUI();
+    DrawForeground();
+//    DrawUI();
+    glDisable(GL_BLEND);
 }
 
 void ViewTexture::Next(double time_interval, SpaceEvent se, HeroMoveDir dir, double intensity)

@@ -78,12 +78,14 @@ public:
     void DrawObstacles(void);
     void DrawHero(void);
     void DrawUI(void);
+    void DrawForeground(void);
     void Render(void);
     // manipulating world
     void Next(double time_interval, SpaceEvent s, HeroMoveDir dir, double intensity);
     void InitTexture();
 
 protected:
+    void DrawTransparent(double x[], double y[], double rgba[]);
     void DrawQuadTex(double x[], double y[], int texId, double rgba[]);
 };
 
