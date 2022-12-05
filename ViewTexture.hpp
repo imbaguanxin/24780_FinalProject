@@ -63,7 +63,7 @@ class ViewTexture
 {
 public:
     World world;
-    int window_x_len, window_y_len;
+    int windowXLen, windowYLen;
     TextureData *texData = nullptr;
 
     ViewTexture();
@@ -73,16 +73,16 @@ public:
     double W2CX(double x);
     double W2CY(double y);
     // rendering function
+    void InitTexture();
     void DrawBackground(int texId);
     void DrawObstacleOne(Obstacle &obs, int texId);
     void DrawObstacles(void);
     void DrawHero(void);
-    void DrawUI(void);
+    void DrawUI(double intensity);
     void DrawForeground(void);
-    void Render(void);
-    // manipulating world
-    void Next(double time_interval, SpaceEvent s, HeroMoveDir dir, double intensity);
-    void InitTexture();
+    void RenderGame(double intensity);
+    void RenderWelcome(void);
+    void RenderWin(void);
 
 protected:
     void DrawTransparent(double x[], double y[], double rgba[]);

@@ -30,17 +30,17 @@ void CreateView(View4Test &v, std::string filename)
         {
             linestream >> x;
             linestream >> y;
-            v.window_x_len = int(x);
-            v.window_y_len = int(y);
-            printf("window size: x:%d, y:%d\n", v.window_x_len, v.window_y_len);
+            v.windowXLen = int(x);
+            v.windowYLen = int(y);
+            printf("window size: x:%d, y:%d\n", v.windowXLen, v.windowYLen);
         }
         else if ("layersize" == word)
         {
             linestream >> x;
             linestream >> y;
-            v.world.layer_x_len = x;
-            v.world.layer_y_len = y;
-            printf("layersize: x:%f, y:%f\n", v.world.layer_x_len, v.world.layer_y_len);
+            v.world.layerXLen = x;
+            v.world.layerYLen = y;
+            printf("layersize: x:%f, y:%f\n", v.world.layerXLen, v.world.layerYLen);
         }
         else if ("hero" == word)
         {
@@ -58,9 +58,9 @@ void CreateView(View4Test &v, std::string filename)
             for (int i = 0; i < total_layer; ++i)
             {
                 Layer l;
-                v.world.layer_list.push_back(l);
+                v.world.layerList.push_back(l);
             }
-            printf("total layer: %lu\n", v.world.layer_list.size());
+            printf("total layer: %lu\n", v.world.layerList.size());
         }
         else if ("layer" == word)
         {
@@ -74,16 +74,16 @@ void CreateView(View4Test &v, std::string filename)
             linestream >> xlen;
             linestream >> ylen;
             Obstacle obs(x, y, xlen, ylen, 0);
-            v.world.layer_list.at(layer).obs_list.push_back(obs);
+            v.world.layerList.at(layer).obsList.push_back(obs);
             printf("layer: %d, obstacle: %lf, %lf, %lf, %lf\n", layer, x, y, xlen, ylen);
         }
     }
     file.close();
-    if (v.world.layer_list.size() != total_layer)
+    if (v.world.layerList.size() != total_layer)
     {
         std::cout << "total layer and claimed layer not match" << std::endl;
     }
-    v.world.current_layer = 0;
+    v.world.currentLayer = 0;
 }
 
 void CreateViewTexture(ViewTexture &v, std::string filename)
@@ -103,17 +103,17 @@ void CreateViewTexture(ViewTexture &v, std::string filename)
         {
             linestream >> x;
             linestream >> y;
-            v.window_x_len = int(x);
-            v.window_y_len = int(y);
-            printf("window size: x:%d, y:%d\n", v.window_x_len, v.window_y_len);
+            v.windowXLen = int(x);
+            v.windowYLen = int(y);
+            printf("window size: x:%d, y:%d\n", v.windowXLen, v.windowYLen);
         }
         else if ("layersize" == word)
         {
             linestream >> x;
             linestream >> y;
-            v.world.layer_x_len = x;
-            v.world.layer_y_len = y;
-            printf("layersize: x:%f, y:%f\n", v.world.layer_x_len, v.world.layer_y_len);
+            v.world.layerXLen = x;
+            v.world.layerYLen = y;
+            printf("layersize: x:%f, y:%f\n", v.world.layerXLen, v.world.layerYLen);
         }
         else if ("hero" == word)
         {
@@ -131,9 +131,9 @@ void CreateViewTexture(ViewTexture &v, std::string filename)
             for (int i = 0; i < total_layer; ++i)
             {
                 Layer l;
-                v.world.layer_list.push_back(l);
+                v.world.layerList.push_back(l);
             }
-            printf("total layer: %lu\n", v.world.layer_list.size());
+            printf("total layer: %lu\n", v.world.layerList.size());
         }
         else if ("layer" == word)
         {
@@ -147,16 +147,16 @@ void CreateViewTexture(ViewTexture &v, std::string filename)
             linestream >> xlen;
             linestream >> ylen;
             Obstacle obs(x, y, xlen, ylen, 0);
-            v.world.layer_list.at(layer).obs_list.push_back(obs);
+            v.world.layerList.at(layer).obsList.push_back(obs);
             printf("layer: %d, obstacle: %lf, %lf, %lf, %lf\n", layer, x, y, xlen, ylen);
         }
     }
     file.close();
-    if (v.world.layer_list.size() != total_layer)
+    if (v.world.layerList.size() != total_layer)
     {
         std::cout << "total layer and claimed layer not match" << std::endl;
     }
-    v.world.current_layer = 0;
+    v.world.currentLayer = 0;
 }
 
 void main4Test()
@@ -168,26 +168,19 @@ void main4Test()
     CreateView(v, "config.txt");
 
     auto now = std::chrono::system_clock::now();
-
+    auto next_now = std::chrono::system_clock::now();
     double time_interval = 0;
-    double intensity = 0;
-    HeroMoveDir dir = stand;
-    SpaceEvent se = spaceDefault;
 
-    FsOpenWindow(16, 16, v.window_x_len, v.window_y_len, 1);
+    FsOpenWindow(16, 16, v.windowXLen, v.windowYLen, 1);
     Controller c;
-    while (!c.isGameEnd())
+    while (!c.IsGameEnd())
     {
-        auto next_now = std::chrono::system_clock::now();
+        next_now = std::chrono::system_clock::now();
         time_interval = double(std::chrono::duration_cast<std::chrono::milliseconds>(next_now - now).count()) / 1000;
         now = next_now;
 
         c.CheckKeyState();
-        dir = c.getMoveDir();
-        intensity = c.getIntensity();
-        se = c.getSpaceEvent();
-
-        v.Next(time_interval, se, dir, intensity);
+        c.WorldNextTick(v.world, time_interval);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         v.Render();
         FsSwapBuffers();
@@ -202,44 +195,60 @@ void main4Texture()
     ViewTexture v;
 
     CreateViewTexture(v, "config.txt");
-    TextureData texD(3);
+    TextureData texD(6);
     v.texData = &texD;
     v.texData->decoders[0].Decode("grass3.png");
     v.texData->decoders[1].Decode("background2.png");
     v.texData->decoders[2].Decode("foreground2.png");
+    v.texData->decoders[3].Decode("banana_l.png");
+    v.texData->decoders[4].Decode("banana_r.png");
+    v.texData->decoders[5].Decode("banana_air.png");
+    // 0: texture for obstacles
+    // 1: background
+    // 2: foreground
+    // 3,4,5 -> hero left, hero right, hero on air
     float color[] = {
         1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0, 1.0
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
     };
     v.texData->setRGBA(color);
 
     auto now = std::chrono::system_clock::now();
-
+    auto next_now = std::chrono::system_clock::now();
     double time_interval = 0;
-    double intensity = 0;
-    HeroMoveDir dir = stand;
-    SpaceEvent se = spaceDefault;
 
-    FsOpenWindow(16, 16, v.window_x_len, v.window_y_len, 1);
+    FsOpenWindow(16, 16, v.windowXLen, v.windowYLen, 1);
 
     Controller c;
     v.InitTexture();
-    while (!c.isGameEnd())
-    {
-        auto next_now = std::chrono::system_clock::now();
-        time_interval = double(std::chrono::duration_cast<std::chrono::milliseconds>(next_now - now).count()) / 1000;
-        now = next_now;
-
-        c.CheckKeyState();
-        dir = c.getMoveDir();
-        intensity = c.getIntensity();
-        se = c.getSpaceEvent();
-
-        v.Next(time_interval, se, dir, intensity);
+    while (!c.IsGameEnd())
+    {   
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-        v.Render();
+        switch (c.gameStage) {
+            case 0:
+                v.RenderWelcome();
+                c.UpdateGameStage(v.world);
+                break;
+            case 1:
+                next_now = std::chrono::system_clock::now();
+                time_interval = double(std::chrono::duration_cast<std::chrono::milliseconds>(next_now - now).count()) / 1000;
+                now = next_now;
+                c.CheckKeyState();
+                c.WorldNextTick(v.world, time_interval);
+                v.RenderGame(c.GetIntensity(v.world));
+                c.UpdateGameStage(v.world);
+                break;
+            case 2:
+                c.CheckKeyState();
+                v.RenderWin();
+                break;
+            default:
+                break;
+        }
         FsSwapBuffers();
         FsSleep(20);
     }
@@ -247,7 +256,7 @@ void main4Texture()
 
 int main()
 {
-    //    main4Test();
-    main4Texture();
+//    main4Test();
+        main4Texture();
     return 0;
 }

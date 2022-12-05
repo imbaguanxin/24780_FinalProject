@@ -12,10 +12,10 @@ const double EM_PI = 3.1415926535;
 class View4Test
 {
 public:
+    World world;
+    int windowXLen, windowYLen;
     View4Test();
     ~View4Test();
-
-    int window_x_len, window_y_len;
 
     void Cleanup();
     // world to canvas
@@ -28,8 +28,5 @@ public:
     void DrawHero(void);
     void DrawUI(void);
     void Render(void);
-    // manipulating world
-    void Next(double time_interval, SpaceEvent s, HeroMoveDir dir, double intensity);
-    World world;
 };
 #endif /* View_hpp */
