@@ -8,7 +8,7 @@ class Layer
 {
 public:
     double xlen, ylen;
-    std::vector<Obstacle> obs_list;
+    std::vector<Obstacle> obsList;
 };
 
 #endif Layer_hpp

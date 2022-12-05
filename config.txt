@@ -1,10 +1,18 @@
-windowsize 600 600
-hero 20 20 1
-layersize 30 30
+windowsize 800 800
+hero 55 195 1
+layersize 100 100
 totallayer 2
 layer 0
-obstacle 10 10 15 2
-obstacle 10 20 5 2
+obstacle 0 0 100 25
+obstacle 75 0 25 25
+obstacle 40 45 20 10
+obstacle 8.8 63 17.5 5
+obstacle 57 74 22 12
+obstacle 15.3 87.5 13.5 5
 layer 1
-obstacle 5 35 15 2
-obstacle 5 50 10 5
+obstacle 50 105 20 5
+obstacle 15 112.5 10 2.5
+obstacle 35 132.5 30 7.5
+obstacle 12.5 168.5 25 6.5
+obstacle 60 155 30 10
+obstacle 50 190.5 10 2.5

@@ -7,13 +7,13 @@
 
 double View4Test::W2CX(double x)
 {
-    return x * window_x_len / double(world.layer_x_len);
+    return x * windowXLen / double(world.layerXLen);
 }
 
 double View4Test::W2CY(double y)
 {
-    double fy = world.layer_y_len - (y - world.current_layer * world.layer_y_len);
-    return fy * window_y_len / world.layer_y_len;
+    double fy = world.layerYLen - (y - world.currentLayer * world.layerYLen);
+    return fy * windowYLen / world.layerYLen;
 }
 
 View4Test::View4Test()
@@ -48,7 +48,7 @@ void View4Test::DrawObstacleOne(Obstacle &obs)
 
 void View4Test::DrawObstacles()
 {
-    for (Obstacle obs : world.layer_list.at(world.current_layer).obs_list)
+    for (Obstacle obs : world.layerList.at(world.currentLayer).obsList)
     {
         DrawObstacleOne(obs);
     }
@@ -78,7 +78,7 @@ void View4Test::DrawUI()
     glColor3ub(0, 0, 0);
     glRasterPos2d(5, 25); // TBD
     char buffer[30];
-    std::sprintf(buffer, "Current Layer: %d", world.current_layer);
+    std::sprintf(buffer, "Current Layer: %d", world.currentLayer);
     YsGlDrawFontBitmap16x20(buffer);
 }
 
@@ -88,13 +88,4 @@ void View4Test::Render()
     DrawObstacles();
     DrawHero();
     DrawUI();
-}
-
-void View4Test::Next(double time_interval, SpaceEvent se, HeroMoveDir dir, double intensity)
-{
-    if (spacePressed == se && world.hero.heroState == onLand)
-    {
-        world.hero.heroState = charging;
-    }
-    world.Next(time_interval, dir, intensity);
 }
