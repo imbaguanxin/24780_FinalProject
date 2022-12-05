@@ -76,10 +76,10 @@ public:
     void DrawBackground(int texId);
     void DrawObstacleOne(Obstacle &obs, int texId);
     void DrawObstacles(void);
-    void DrawHero(void);
+    void DrawHero(double intensity);
     void DrawUI(void);
     void DrawForeground(void);
-    void Render(void);
+    void Render(double intensity);
     // manipulating world
     void Next(double time_interval, SpaceEvent s, HeroMoveDir dir, double intensity);
     void InitTexture();

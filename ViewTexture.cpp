@@ -1,5 +1,6 @@
 #include "ViewTexture.hpp"
 
+
 #include <cstdio>
 #include <cmath>
 
@@ -80,9 +81,9 @@ void ViewTexture::DrawTransparent(double x[], double y[], double rgba[])
 
 void ViewTexture::DrawQuadTex(double x[], double y[], int texId, double rgba[])
 {
-    glBindTexture(GL_TEXTURE_2D, texData->texIds[0]);
+    glBindTexture(GL_TEXTURE_2D, texData->texIds[texId]);
     glBegin(GL_QUADS);
-    glColor4d(1.0, 1.0, 1.0, 1.0);
+    glColor4d(1.0, 1.0, 1.0, 1.0); // rgba[]?
     glTexCoord2d(0.0, 0.0); // top part
     glVertex2d(x[0], y[0]); // w2cx, w2cy+y-1
     glTexCoord2d(1.0, 0.0);
@@ -167,10 +168,49 @@ void ViewTexture::DrawObstacles(void)
     }
 }
 
-void ViewTexture::DrawHero()
+void ViewTexture::DrawHero(double intensity)
 {
-    // draw circle-bounded banana
-    // Draw externally and load from PNG (6 states) OR draw by OpenGL (texture) (quite complicated)
+    double hx = world.hero.x;
+    double hy = world.hero.y;
+    double hr = world.hero.radius;
+    double x[4] = { W2CX(hx - hr), W2CX(hx + hr), W2CX(hx + hr), W2CX(hx - hr) };
+    double y[4] = { W2CY(hy + hr), W2CY(hy + hr), W2CY(hy - hr), W2CY(hy - hr) };
+    double rgba[4] = { 1.0, 1.0, 1.0, 1.0 };
+
+    switch (world.hero.heroState)
+    {
+    case charging:
+        y[2] = W2CY(hy - hr + 2 * (1 - intensity) * hr);
+        y[3] = W2CY(hy - hr + 2 * (1 - intensity) * hr);
+        // what's the unit for intensity?
+    case onLand:
+        if (world.hero.heroDir = moveLeft)
+        {
+            DrawQuadTex(x, y, 3, rgba);
+        }
+        else if (world.hero.heroDir = moveRight)
+        {
+            DrawQuadTex(x, y, 4, rgba);
+        }
+        else if (world.hero.heroDir = stand)
+        {
+            DrawQuadTex(x, y, 7, rgba);
+        }
+        break;
+    case onAir:
+        if (world.hero.heroDir = moveLeft)
+        {
+            DrawQuadTex(x, y, 5, rgba);
+        }
+        else if (world.hero.heroDir = moveRight)
+        {
+            DrawQuadTex(x, y, 6, rgba);
+        }
+        break;
+    default:
+        DrawQuadTex(x, y, 7, rgba);
+        break;
+    }
 }
 
 void ViewTexture::DrawForeground()
@@ -200,14 +240,14 @@ void ViewTexture::DrawUI()
     YsGlDrawFontBitmap16x20(buffer);
 }
 
-void ViewTexture::Render()
+void ViewTexture::Render(double intensity)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 //    InitTexture();
     DrawBackground(0);
+    DrawHero(intensity);
     DrawObstacles();
-    //    DrawHero();
     DrawForeground();
 //    DrawUI();
     glDisable(GL_BLEND);

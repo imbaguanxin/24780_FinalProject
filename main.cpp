@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <chrono>
 
-void CreateView(View4Test &v, std::string filename)
+void CreateView(View4Test& v, std::string filename)
 {
     std::ifstream file;
     std::string line, word;
@@ -86,7 +86,7 @@ void CreateView(View4Test &v, std::string filename)
     v.world.current_layer = 0;
 }
 
-void CreateViewTexture(ViewTexture &v, std::string filename)
+void CreateViewTexture(ViewTexture& v, std::string filename)
 {
     std::ifstream file;
     std::string line, word;
@@ -188,6 +188,7 @@ void main4Test()
         se = c.getSpaceEvent();
 
         v.Next(time_interval, se, dir, intensity);
+
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         v.Render();
         FsSwapBuffers();
@@ -202,12 +203,22 @@ void main4Texture()
     ViewTexture v;
 
     CreateViewTexture(v, "config.txt");
-    TextureData texD(3);
+    TextureData texD(8);
     v.texData = &texD;
     v.texData->decoders[0].Decode("grass3.png");
     v.texData->decoders[1].Decode("background2.png");
     v.texData->decoders[2].Decode("foreground2.png");
+    v.texData->decoders[3].Decode("banana_l.png");
+    v.texData->decoders[4].Decode("banana_r.png");
+    v.texData->decoders[5].Decode("banana_air_l.png");
+    v.texData->decoders[6].Decode("banana_air_r.png");
+    v.texData->decoders[7].Decode("banana_s.png");
     float color[] = {
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0
@@ -239,7 +250,7 @@ void main4Texture()
         v.Next(time_interval, se, dir, intensity);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-        v.Render();
+        v.Render(intensity);
         FsSwapBuffers();
         FsSleep(20);
     }
