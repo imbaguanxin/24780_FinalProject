@@ -139,12 +139,27 @@ void Controller::CheckKeyState(void)
         else
         { // previously pressed
             se = spaceReleased;
-            auto now = std::chrono::system_clock::now();
         }
         spaceState = nowSpaceState;
     }
     else
     {
         se = spaceDefault;
+    }
+}
+
+void Controller::UpdateGameStage(World &w)
+{
+    if (gameStage == 0) {
+        FsPollDevice();
+        int key = FsInkey();
+        if (FSKEY_SPACE == key)
+        {
+            gameStage = 1;
+        }
+    } else if (gameStage == 1) {
+        if (w.CheckWin()) {
+            gameStage = 2;
+        }
     }
 }

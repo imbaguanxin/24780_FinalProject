@@ -48,6 +48,9 @@ void View4Test::DrawObstacleOne(Obstacle &obs)
 
 void View4Test::DrawObstacles()
 {
+    if (world.CheckWin()){
+        return;
+    }
     for (Obstacle obs : world.layerList.at(world.currentLayer).obsList)
     {
         DrawObstacleOne(obs);

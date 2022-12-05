@@ -5,7 +5,6 @@
 #include "Hero.hpp"
 #include "Layer.hpp"
 #include "Obstacle.hpp"
-// #include "Controller.hpp"
 class World
 {
 public:
@@ -13,11 +12,9 @@ public:
     std::vector<Layer> layerList;
     int currentLayer;
     double layerXLen, layerYLen;
-    bool isWin = false;
 
     World(void);
     ~World(void);
-    void MoveHeroOnAir(double time_interval);
     // allowed attempts:
     bool JumpHero(double instensity, HeroMoveDir dir);
     bool MoveHeroLeftOnLand(double time_interval);
@@ -25,15 +22,18 @@ public:
     bool StartCharging();
     // calculate next step (on air)
     void CalcNext(double time_interval);
+    // check is win
+    bool CheckWin(void);
 
 protected:
     // physical simulation
+    void MoveHeroOnAir(double time_interval);
     void CheckHitObstacle(void);
     void CheckHitEdge(void);
     void RenewLayer(void);
     void CheckDropObstacle(void);
-    void CheckWin(void);
     const int hero_move_speed = 5; // move speed of hero
+    bool isWin = false;
 };
 
 #endif /* World_hpp */

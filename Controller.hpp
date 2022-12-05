@@ -26,6 +26,7 @@ protected:
     double GetTimeDiff(void);
 
 public:
+    int gameStage = 0;
     Controller();
     bool IsGameEnd();
     SpaceEvent GetSpaceEvent();
@@ -33,6 +34,7 @@ public:
     double GetIntensity(World &w);
     void CheckKeyState(void);
     void WorldNextTick(World &w, double time_interval);
+    void UpdateGameStage(World &w);
 };
 
 #endif /* Controller_hpp */

@@ -13,66 +13,19 @@ World::~World(void)
 
 void World::MoveHeroOnAir(double time_interval)
 {
+    if (CheckWin())
+        return;
     hero.y += hero.vy * time_interval;
     hero.x += hero.vx * time_interval;
     hero.vy -= hero.ay * time_interval;
 }
 
-bool World::MoveHeroRightOnLand(double time_interval)
-{
-    if (hero.heroState != onLand)
-    {
-        return false;
-    }
-    hero.x += hero_move_speed * time_interval;
-    RenewLayer();
-    CheckDropObstacle();
-    CheckHitEdge();
-    return true;
-}
-
-bool World::MoveHeroLeftOnLand(double time_interval)
-{
-    if (hero.heroState != onLand)
-    {
-        return false;
-    }
-    hero.x -= hero_move_speed * time_interval;
-    RenewLayer();
-    CheckDropObstacle();
-    CheckHitEdge();
-    return true;
-}
-
-void World::CalcNext(double time_interval)
-{
-    if (hero.heroState != onAir)
-    {
-        return;
-    }
-    MoveHeroOnAir(time_interval);
-    CheckHitObstacle();
-    RenewLayer();
-    CheckHitEdge();
-}
-
-bool World::StartCharging()
-{
-    if (onLand != hero.heroState)
-    {
-        return false;
-    }
-    hero.heroState = charging;
-    return true;
-}
-
 bool World::JumpHero(double intensity, HeroMoveDir dir)
 {
-    if (charging != hero.heroState)
-    {
+    if (CheckWin())
         return false;
-    }
-
+    if (charging != hero.heroState)
+        return false;
     hero.heroState = onAir;
     hero.heroDir = dir;
     hero.vy += intensity;
@@ -95,8 +48,66 @@ bool World::JumpHero(double intensity, HeroMoveDir dir)
     return true;
 }
 
+bool World::MoveHeroRightOnLand(double time_interval)
+{
+    if (CheckWin())
+        return false;
+    if (hero.heroState != onLand)
+    {
+        return false;
+    }
+    hero.x += hero_move_speed * time_interval;
+    RenewLayer();
+    CheckDropObstacle();
+    CheckHitEdge();
+    return true;
+}
+
+bool World::MoveHeroLeftOnLand(double time_interval)
+{
+    if (CheckWin())
+        return false;
+    if (hero.heroState != onLand)
+    {
+        return false;
+    }
+    hero.x -= hero_move_speed * time_interval;
+    RenewLayer();
+    CheckDropObstacle();
+    CheckHitEdge();
+    return true;
+}
+
+bool World::StartCharging()
+{
+    if (CheckWin())
+        return false;
+    if (onLand != hero.heroState)
+    {
+        return false;
+    }
+    hero.heroState = charging;
+    return true;
+}
+
+void World::CalcNext(double time_interval)
+{
+    if (CheckWin())
+        return;
+    if (hero.heroState != onAir)
+    {
+        return;
+    }
+    MoveHeroOnAir(time_interval);
+    CheckHitObstacle();
+    RenewLayer();
+    CheckHitEdge();
+}
+
 void World::CheckHitObstacle(void)
 {
+    if (CheckWin())
+        return;
     for (Obstacle &obs : layerList.at(currentLayer).obsList) // also detect current layer + 1 and current layer - 1 ?
     {
         double dx, dy;
@@ -111,11 +122,13 @@ void World::CheckHitObstacle(void)
             hero.vy = 0;
             hero.heroDir = stand;
             obs.state = 1;
+            CheckWin();
         }
         else if (dx >= 0 && dx <= obs.GetXlen() && dy < 0.5 * obs.GetYlen() && dy >= -hero.radius)
         {
             printf("Hit from bottom!\n");
             hero.y = obs.GetY() - hero.radius; // hit from bottom
+            CheckWin();
             hero.vy = -hero.vy;
         }
         else if (dx < 0 && dx >= -hero.radius && dy >= 0 && dy <= obs.GetYlen()) // hit from left
@@ -168,10 +181,13 @@ void World::CheckHitEdge(void) //(double x, double y)
 void World::RenewLayer(void)
 {
     currentLayer = (int)hero.y / layerYLen;
+    isWin = currentLayer < 0 || currentLayer >= layerList.size();
 }
 
 void World::CheckDropObstacle(void)
 {
+    if (CheckWin())
+        return;
     for (Obstacle &obs : layerList.at(currentLayer).obsList)
     {
         if (obs.state == 0)
@@ -191,4 +207,11 @@ void World::CheckDropObstacle(void)
             JumpHero(0, moveRight);
         }
     }
+}
+
+bool World::CheckWin()
+{
+    if (!isWin)
+        RenewLayer();
+    return isWin;
 }

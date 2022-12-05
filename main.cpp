@@ -211,59 +211,62 @@ void main4Texture()
     // 2: foreground
     // 3,4,5 -> hero left, hero right, hero on air
     float color[] = {
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-        1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
     };
     v.texData->setRGBA(color);
 
     auto now = std::chrono::system_clock::now();
-
+    auto next_now = std::chrono::system_clock::now();
     double time_interval = 0;
-    double intensity = 0;
-    HeroMoveDir dir = stand;
-    SpaceEvent se = spaceDefault;
 
     FsOpenWindow(16, 16, v.windowXLen, v.windowYLen, 1);
 
     Controller c;
     v.InitTexture();
     while (!c.IsGameEnd())
-    {
-        auto next_now = std::chrono::system_clock::now();
-        time_interval = double(std::chrono::duration_cast<std::chrono::milliseconds>(next_now - now).count()) / 1000;
-        now = next_now;
-
-        c.CheckKeyState();
-        // dir = c.getMoveDir();
-        // intensity = c.getIntensity();
-        // se = c.getSpaceEvent();
-
-        // v.Next(time_interval, se, dir, intensity);
+    {   
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-        v.RenderWelcome();
+//        switch (c.gameStage)
+//        {
+//            case 0:
+//                v.RenderWelcome();
+//                break;
+//            case 1:
+//                auto next_now = std::chrono::system_clock::now();
+//                time_interval = double(std::chrono::duration_cast<std::chrono::milliseconds>(next_now - now).count()) / 1000;
+//                now = next_now;
+//                c.CheckKeyState();
+//                c.WorldNextTick(v.world, time_interval);
+//                v.RenderGame();
+//                break;
+//            case 2:
+//                v.RenderWin();
+//                break;
+//        }
+        switch (c.gameStage) {
+            case 0:
+                v.RenderWelcome();
+                c.UpdateGameStage(v.world);
+                break;
+            case 1:
+                next_now = std::chrono::system_clock::now();
+                time_interval = double(std::chrono::duration_cast<std::chrono::milliseconds>(next_now - now).count()) / 1000;
+                c.CheckKeyState();
+                c.WorldNextTick(v.world, time_interval);
+                v.RenderGame();
+                c.UpdateGameStage(v.world);
+                break;
+            case 2:
+                v.RenderWin();
+                break;
+            default:
+                break;
+        }
         FsSwapBuffers();
         FsSleep(20);
     }
