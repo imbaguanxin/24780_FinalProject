@@ -78,9 +78,9 @@ public:
     void DrawObstacleOne(Obstacle &obs, int texId);
     void DrawObstacles(void);
     void DrawHero(void);
-    void DrawUI(void);
+    void DrawUI(double intensity);
     void DrawForeground(void);
-    void RenderGame(void);
+    void RenderGame(double intensity);
     void RenderWelcome(void);
     void RenderWin(void);
 

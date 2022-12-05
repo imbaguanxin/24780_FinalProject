@@ -56,6 +56,7 @@ bool World::MoveHeroRightOnLand(double time_interval)
     {
         return false;
     }
+    hero.heroDir = moveRight;
     hero.x += hero_move_speed * time_interval;
     RenewLayer();
     CheckDropObstacle();
@@ -71,6 +72,7 @@ bool World::MoveHeroLeftOnLand(double time_interval)
     {
         return false;
     }
+    hero.heroDir = moveLeft;
     hero.x -= hero_move_speed * time_interval;
     RenewLayer();
     CheckDropObstacle();

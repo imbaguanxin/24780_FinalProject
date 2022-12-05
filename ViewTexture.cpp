@@ -153,6 +153,10 @@ void ViewTexture::DrawObstacleOne(Obstacle &obs, int texId)
 
 void ViewTexture::DrawObstacles(void)
 {
+    if (world.CheckWin())
+    {
+        return;
+    }
     for (Obstacle obs : world.layerList.at(world.currentLayer).obsList)
     {
         DrawObstacleOne(obs, 0);
@@ -163,7 +167,41 @@ void ViewTexture::DrawHero()
 {
     // draw circle-bounded banana
     // Draw externally and load from PNG (6 states) OR draw by OpenGL (texture) (quite complicated)
+    double x[] = {
+        W2CX(world.hero.x - world.hero.radius),
+        W2CX(world.hero.x + world.hero.radius),
+        W2CX(world.hero.x + world.hero.radius),
+        W2CX(world.hero.x - world.hero.radius)};
+    double y[] = {
+        W2CY(world.hero.y - world.hero.radius),
+        W2CY(world.hero.y - world.hero.radius),
+        W2CY(world.hero.y + world.hero.radius),
+        W2CY(world.hero.y + world.hero.radius)};
+    double rgba[] = {1.0, 1.0, 1.0, 1.0};
+
+    if (charging == world.hero.heroState)
+    {
+        y[2] = W2CY(world.hero.y + world.hero.radius * 0.3);
+        y[3] = W2CY(world.hero.y + world.hero.radius * 0.3);
+    }
+
+    if (onAir == world.hero.heroState)
+    {
+        DrawQuadTex(x, y, 5, rgba);
+    }
+    else
+    {
+        if (moveLeft == world.hero.heroDir)
+        {
+            DrawQuadTex(x, y, 3, rgba);
+        }
+        else
+        {
+            DrawQuadTex(x, y, 4, rgba);
+        }
+    }
 }
+
 
 void ViewTexture::DrawForeground()
 {
@@ -173,7 +211,7 @@ void ViewTexture::DrawForeground()
     DrawQuadTex(x, y, 2, rgba);
 }
 
-void ViewTexture::DrawUI()
+void ViewTexture::DrawUI(double intensity)
 {
     // Top layer texts that keep showing all the time in game
     // Introduction / Conclusion can be done later
@@ -182,17 +220,20 @@ void ViewTexture::DrawUI()
     char buffer[30];
     std::sprintf(buffer, "Current Layer: %d", world.currentLayer);
     YsGlDrawFontBitmap16x20(buffer);
+    glRasterPos2d(5, 55);
+    std::sprintf(buffer, "Intensity: %f", intensity);
+    YsGlDrawFontBitmap16x20(buffer);
 }
 
-void ViewTexture::RenderGame()
+void ViewTexture::RenderGame(double intensity)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     DrawBackground(1);
     DrawObstacles();
-    //    DrawHero();
+    DrawHero();
     DrawForeground();
-    DrawUI();
+    DrawUI(intensity);
     glDisable(GL_BLEND);
 }
 

@@ -153,13 +153,22 @@ void Controller::UpdateGameStage(World &w)
     if (gameStage == 0) {
         FsPollDevice();
         int key = FsInkey();
-        if (FSKEY_SPACE == key)
+        if (FSKEY_ESC == key)
         {
+            esc = true;
+        } else if (FSKEY_SPACE == key) {
             gameStage = 1;
         }
-    } else if (gameStage == 1) {
+    } else if (gameStage == 2) {
         if (w.CheckWin()) {
             gameStage = 2;
+        }
+    } else {
+        FsPollDevice();
+        int key = FsInkey();
+        if (FSKEY_ESC == key)
+        {
+            esc = true;
         }
     }
 }

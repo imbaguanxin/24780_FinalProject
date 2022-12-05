@@ -168,17 +168,14 @@ void main4Test()
     CreateView(v, "config.txt");
 
     auto now = std::chrono::system_clock::now();
-
+    auto next_now = std::chrono::system_clock::now();
     double time_interval = 0;
-    double intensity = 0;
-    HeroMoveDir dir = stand;
-    SpaceEvent se = spaceDefault;
 
     FsOpenWindow(16, 16, v.windowXLen, v.windowYLen, 1);
     Controller c;
     while (!c.IsGameEnd())
     {
-        auto next_now = std::chrono::system_clock::now();
+        next_now = std::chrono::system_clock::now();
         time_interval = double(std::chrono::duration_cast<std::chrono::milliseconds>(next_now - now).count()) / 1000;
         now = next_now;
 
@@ -231,23 +228,6 @@ void main4Texture()
     while (!c.IsGameEnd())
     {   
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-//        switch (c.gameStage)
-//        {
-//            case 0:
-//                v.RenderWelcome();
-//                break;
-//            case 1:
-//                auto next_now = std::chrono::system_clock::now();
-//                time_interval = double(std::chrono::duration_cast<std::chrono::milliseconds>(next_now - now).count()) / 1000;
-//                now = next_now;
-//                c.CheckKeyState();
-//                c.WorldNextTick(v.world, time_interval);
-//                v.RenderGame();
-//                break;
-//            case 2:
-//                v.RenderWin();
-//                break;
-//        }
         switch (c.gameStage) {
             case 0:
                 v.RenderWelcome();
@@ -256,12 +236,14 @@ void main4Texture()
             case 1:
                 next_now = std::chrono::system_clock::now();
                 time_interval = double(std::chrono::duration_cast<std::chrono::milliseconds>(next_now - now).count()) / 1000;
+                now = next_now;
                 c.CheckKeyState();
                 c.WorldNextTick(v.world, time_interval);
-                v.RenderGame();
+                v.RenderGame(c.GetIntensity(v.world));
                 c.UpdateGameStage(v.world);
                 break;
             case 2:
+                c.CheckKeyState();
                 v.RenderWin();
                 break;
             default:
@@ -274,7 +256,7 @@ void main4Texture()
 
 int main()
 {
-    main4Test();
-    //    main4Texture();
+//    main4Test();
+        main4Texture();
     return 0;
 }
