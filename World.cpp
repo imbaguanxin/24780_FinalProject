@@ -1,4 +1,5 @@
 #include "World.hpp"
+#include <math.h>
 
 World::World(void)
 {
@@ -117,20 +118,18 @@ void World::CheckHitObstacle(void)
         dy = hero.y - obs.GetY();
         if (dx >= 0 && dx <= obs.GetXlen() && dy <= obs.GetYlen() + hero.radius && dy >= 0.5 * obs.GetYlen())
         {
-            printf("Hit from top\n");
+            printf("Hit from top!\n");
             hero.y = obs.GetY() + obs.GetYlen() + hero.radius;
             hero.heroState = onLand;
             hero.vx = 0;
             hero.vy = 0;
             hero.heroDir = stand;
             obs.state = 1;
-            CheckWin();
         }
         else if (dx >= 0 && dx <= obs.GetXlen() && dy < 0.5 * obs.GetYlen() && dy >= -hero.radius)
         {
             printf("Hit from bottom!\n");
             hero.y = obs.GetY() - hero.radius; // hit from bottom
-            CheckWin();
             hero.vy = -hero.vy;
         }
         else if (dx < 0 && dx >= -hero.radius && dy >= 0 && dy <= obs.GetYlen()) // hit from left
@@ -144,6 +143,35 @@ void World::CheckHitObstacle(void)
             printf("Hit from right!\n");
             hero.x = obs.GetX() + obs.GetXlen() + hero.radius;
             hero.vx = -hero.vx;
+        }
+        else if (dx < 0 && dx >= -hero.radius && dy >= -hero.radius && dy < 0) {
+            if (sqrt(dx * dx + dy * dy) < hero.radius) {
+                printf("Hit from left corner!\n");
+                double theta = atan2(dy, dx);
+                double y = sin(theta) * hero.radius;
+                double x = cos(theta) * hero.radius;
+
+                double c = -2 * (x * hero.vx + y * hero.vy) / (hero.radius * hero.radius);
+                hero.vx += c * x;
+                hero.vy += c * y;
+                hero.x = obs.GetX() + x;
+                hero.y = obs.GetY() + y;
+            }
+        }
+        else if (dx > obs.GetXlen() && dx <= hero.radius + obs.GetXlen() && dy >= -hero.radius && dy < 0) {
+            double rdx = dx - obs.GetXlen();
+            if (sqrt(rdx * rdx + dy * dy) < hero.radius) {
+                printf("Hit from right corner!\n");
+                double theta = atan2(dy, rdx);
+                double y = sin(theta) * hero.radius;
+                double x = cos(theta) * hero.radius;
+
+                double c = -2 * (x * hero.vx + y * hero.vy) / (hero.radius * hero.radius);
+                hero.vx += c * x;
+                hero.vy += c * y;
+                hero.x = obs.GetX() + obs.GetXlen() + x;
+                hero.y = obs.GetY() + y;
+            }
         }
     }
 }
