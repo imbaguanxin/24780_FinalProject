@@ -22,7 +22,8 @@ protected:
     SpaceEvent se;
     HeroMoveDir dir;
     std::chrono::time_point<std::chrono::system_clock> timestamp;
-    double maxIntensity = 30; // max speed vy: 15m/s
+    const double maxIntensity = 30; // max speed vy: 30 m/s
+    const double chargingSpeed = 0.03; // 0.02 m/ms^2
     double GetTimeDiff(void);
 
 public:
