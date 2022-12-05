@@ -36,7 +36,7 @@ double Controller::GetIntensityPercent(World &w) {
 double Controller::GetTimeDiff(void)
 {
     auto now = std::chrono::system_clock::now();
-    auto intensity = std::chrono::duration_cast<std::chrono::milliseconds>(now - timestamp).count() / 50;
+    auto intensity = std::chrono::duration_cast<std::chrono::milliseconds>(now - timestamp).count() * chargingSpeed;
     return double(intensity);
 }
 
