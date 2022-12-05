@@ -239,7 +239,7 @@ void main4Texture()
                 now = next_now;
                 c.CheckKeyState();
                 c.WorldNextTick(v.world, time_interval);
-                v.RenderGame(c.GetIntensity(v.world));
+                v.RenderGame(c.GetIntensityPercent(v.world));
                 c.UpdateGameStage(v.world);
                 break;
             case 2:

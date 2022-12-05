@@ -163,7 +163,7 @@ void ViewTexture::DrawObstacles(void)
     }
 }
 
-void ViewTexture::DrawHero()
+void ViewTexture::DrawHero(double intensity)
 {
     // draw circle-bounded banana
     // Draw externally and load from PNG (6 states) OR draw by OpenGL (texture) (quite complicated)
@@ -181,8 +181,8 @@ void ViewTexture::DrawHero()
 
     if (charging == world.hero.heroState)
     {
-        y[2] = W2CY(world.hero.y + world.hero.radius * 0.3);
-        y[3] = W2CY(world.hero.y + world.hero.radius * 0.3);
+        y[2] = W2CY(world.hero.y + world.hero.radius * intensity);
+        y[3] = W2CY(world.hero.y + world.hero.radius * intensity);
     }
 
     if (onAir == world.hero.heroState)
@@ -221,7 +221,7 @@ void ViewTexture::DrawUI(double intensity)
     std::sprintf(buffer, "Current Layer: %d", world.currentLayer);
     YsGlDrawFontBitmap16x20(buffer);
     glRasterPos2d(5, 55);
-    std::sprintf(buffer, "Intensity: %f", intensity);
+    std::sprintf(buffer, "Intensity: %1.1lf %%", intensity * 100);
     YsGlDrawFontBitmap16x20(buffer);
 }
 
@@ -231,7 +231,7 @@ void ViewTexture::RenderGame(double intensity)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     DrawBackground(1);
     DrawObstacles();
-    DrawHero();
+    DrawHero(intensity);
     DrawForeground();
     DrawUI(intensity);
     glDisable(GL_BLEND);
