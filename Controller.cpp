@@ -29,6 +29,10 @@ double Controller::GetIntensity(World &w)
     }
     return 0;
 }
+
+double Controller::GetIntensityPercent(World &w) {
+    return GetIntensity(w) / maxIntensity;
+}
 double Controller::GetTimeDiff(void)
 {
     auto now = std::chrono::system_clock::now();

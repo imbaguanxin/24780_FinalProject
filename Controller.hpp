@@ -32,6 +32,7 @@ public:
     SpaceEvent GetSpaceEvent();
     HeroMoveDir GetMoveDir();
     double GetIntensity(World &w);
+    double GetIntensityPercent(World &w);
     void CheckKeyState(void);
     void WorldNextTick(World &w, double time_interval);
     void UpdateGameStage(World &w);
