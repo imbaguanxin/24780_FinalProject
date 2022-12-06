@@ -163,7 +163,7 @@ void Controller::UpdateGameStage(World &w)
         } else if (FSKEY_SPACE == key) {
             gameStage = 1;
         }
-    } else if (gameStage == 2) {
+    } else if (gameStage == 1) {
         if (w.CheckWin()) {
             gameStage = 2;
         }
