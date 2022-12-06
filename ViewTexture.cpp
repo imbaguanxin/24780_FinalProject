@@ -62,7 +62,6 @@ void ViewTexture::InitTexture()
                      GL_UNSIGNED_BYTE,
                      texData->decoders[i].rgba);
     }
-
     glEnable(GL_TEXTURE_2D); // Begin using texture mapping
 }
 
@@ -209,7 +208,6 @@ void ViewTexture::DrawHero(double intensity)
     }
 }
 
-
 void ViewTexture::DrawForeground()
 {
     double x[] = {0.0, double(windowXLen), double(windowXLen), 0};
@@ -251,46 +249,33 @@ void ViewTexture::RenderWelcome(void)
 
     double x[] = {0.0, double(windowXLen), double(windowXLen), 0};
     double y[] = {0.0, 0.0, double(windowYLen), double(windowYLen)};
-    double rgba[] = {1.0, 1.0, 1.0, 0.5};
+    double rgba[] = {1.0, 1.0, 1.0, 0.8};
     DrawQuadTex(x, y, 7, rgba);
-    glDisable(GL_BLEND);
-    
-    glColor3ub(0,0,0);
-    char buffer[30];
-    glRasterPos2d(windowXLen / 2 - 32 * 6, windowYLen / 4 + 10);
-    std::sprintf(buffer, "Banana Jump!");
-    YsGlDrawFontBitmap32x48(buffer);
-    
+    glColor3ub(0, 0, 0);
+    glRasterPos2d(windowXLen / 2 - 32 * 6, windowYLen / 4 - 15);
+    YsGlDrawFontBitmap32x48("Banana Jump!");
     glRasterPos2d(windowXLen / 2 - 16 * 12, windowYLen / 2 + 10);
-    std::sprintf(buffer, "Jump: Space");
-    YsGlDrawFontBitmap16x20(buffer);
-    
+    YsGlDrawFontBitmap16x20("Jump: Space");
     glRasterPos2d(windowXLen / 2 - 16 * 12, windowYLen / 2 + 40);
-    std::sprintf(buffer, "Left arrow: move left");
-    YsGlDrawFontBitmap16x20(buffer);
-    
+    YsGlDrawFontBitmap16x20("Left arrow: move left");
     glRasterPos2d(windowXLen / 2 - 16 * 12, windowYLen / 2 + 70);
-    std::sprintf(buffer, "Right arrow: move right");
-    YsGlDrawFontBitmap16x20(buffer);
-    
+    YsGlDrawFontBitmap16x20("Right arrow: move right");
     glRasterPos2d(windowXLen / 2 - 16 * 10, windowYLen / 4 * 3 + 10);
-    std::sprintf(buffer, "Press Space to Start");
-    YsGlDrawFontBitmap16x20(buffer);
-    
-    
+    YsGlDrawFontBitmap16x20("Press Space to Start");
+    glDisable(GL_BLEND);
 }
 
 void ViewTexture::RenderWin(void)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     double x[] = {0.0, double(windowXLen), double(windowXLen), 0};
     double y[] = {0.0, 0.0, double(windowYLen), double(windowYLen)};
-    double rgba[] = {1.0, 1.0, 1.0, 0.5};
-    glDisable(GL_BLEND);
-    DrawQuadTex(x, y, 7, rgba);
+    double rgba[] = {1.0, 1.0, 1.0, 0.8};
+    DrawQuadTex(x, y, 8, rgba);
     glColor3ub(0, 0, 0);
-    glRasterPos2d(windowXLen / 2 - 32 * 4, windowYLen / 2 + 10);
+    glRasterPos2d(windowXLen / 2 - 32 * 4, windowYLen / 2);
     YsGlDrawFontBitmap32x48("You Win!");
-    
+    glDisable(GL_BLEND);
 }
