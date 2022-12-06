@@ -32,7 +32,7 @@ protected:
     void CheckHitEdge(void);
     void RenewLayer(void);
     void CheckDropObstacle(void);
-    const int heroMoveSpeed = 5; // move speed of hero
+    const int heroMoveSpeed = 10; // move speed of hero
     bool isWin = false;
 };
 

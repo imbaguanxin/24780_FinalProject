@@ -181,13 +181,20 @@ void ViewTexture::DrawHero(double intensity)
 
     if (charging == world.hero.heroState)
     {
-        y[2] = W2CY(world.hero.y + world.hero.radius * intensity);
-        y[3] = W2CY(world.hero.y + world.hero.radius * intensity);
+        y[2] = W2CY(world.hero.y + world.hero.radius * (1 - intensity));
+        y[3] = W2CY(world.hero.y + world.hero.radius * (1 - intensity));
     }
 
     if (onAir == world.hero.heroState)
     {
-        DrawQuadTex(x, y, 5, rgba);
+        if (moveLeft == world.hero.heroDir)
+        {
+            DrawQuadTex(x, y, 5, rgba);
+        }
+        else
+        {
+            DrawQuadTex(x, y, 6, rgba);
+        }
     }
     else
     {

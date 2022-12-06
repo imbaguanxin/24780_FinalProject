@@ -116,6 +116,7 @@ void World::CheckHitObstacle(void)
         double dx, dy;
         dx = hero.x - obs.GetX();
         dy = hero.y - obs.GetY();
+        double x=0, y=0, theta=0, c=0, rdx=0;
         if (dx >= 0 && dx <= obs.GetXlen() && dy <= obs.GetYlen() + hero.radius && dy >= 0.5 * obs.GetYlen())
         {
             printf("Hit from top!\n");
@@ -123,7 +124,7 @@ void World::CheckHitObstacle(void)
             hero.heroState = onLand;
             hero.vx = 0;
             hero.vy = 0;
-            hero.heroDir = stand;
+//            hero.heroDir = stand;
             obs.state = 1;
         }
         else if (dx >= 0 && dx <= obs.GetXlen() && dy < 0.5 * obs.GetYlen() && dy >= -hero.radius)
@@ -145,13 +146,18 @@ void World::CheckHitObstacle(void)
             hero.vx = -hero.vx;
         }
         else if (dx < 0 && dx >= -hero.radius && dy >= -hero.radius && dy < 0) {
+            // physics behind this:
+            // obey 2 formula:
+            // new_vx, new_vy = vx + c * x, vx + c * y
+            // nex_vx^2 + new_vy^2 = vx^2 + vy^2
+            // where (x,y) is the unit vector of collesion direction.
             if (sqrt(dx * dx + dy * dy) < hero.radius) {
                 printf("Hit from left corner!\n");
-                double theta = atan2(dy, dx);
-                double y = sin(theta) * hero.radius;
-                double x = cos(theta) * hero.radius;
-
-                double c = -2 * (x * hero.vx + y * hero.vy) / (hero.radius * hero.radius);
+                theta = atan2(dy, dx);
+                y = sin(theta) * hero.radius;
+                x = cos(theta) * hero.radius;
+                printf("theta, x, y: %f, %f, %f\n", theta, x, y);
+                c = -2 * (x * hero.vx + y * hero.vy) / (hero.radius * hero.radius);
                 hero.vx += c * x;
                 hero.vy += c * y;
                 hero.x = obs.GetX() + x;
@@ -159,14 +165,14 @@ void World::CheckHitObstacle(void)
             }
         }
         else if (dx > obs.GetXlen() && dx <= hero.radius + obs.GetXlen() && dy >= -hero.radius && dy < 0) {
-            double rdx = dx - obs.GetXlen();
+            rdx = dx - obs.GetXlen();
             if (sqrt(rdx * rdx + dy * dy) < hero.radius) {
                 printf("Hit from right corner!\n");
-                double theta = atan2(dy, rdx);
-                double y = sin(theta) * hero.radius;
-                double x = cos(theta) * hero.radius;
+                theta = atan2(dy, rdx);
+                y = sin(theta) * hero.radius;
+                x = cos(theta) * hero.radius;
 
-                double c = -2 * (x * hero.vx + y * hero.vy) / (hero.radius * hero.radius);
+                c = -2 * (x * hero.vx + y * hero.vy) / (hero.radius * hero.radius);
                 hero.vx += c * x;
                 hero.vy += c * y;
                 hero.x = obs.GetX() + obs.GetXlen() + x;

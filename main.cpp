@@ -50,6 +50,7 @@ void CreateView(View4Test &v, std::string filename)
             v.world.hero.x = x;
             v.world.hero.y = y;
             v.world.hero.radius = radius;
+            v.world.hero.heroState = onAir;
             printf("hero: x:%f, y:%f, radius:%f\n", v.world.hero.radius, v.world.hero.y, radius);
         }
         else if ("totallayer" == word)
@@ -123,6 +124,7 @@ void CreateViewTexture(ViewTexture &v, std::string filename)
             v.world.hero.x = x;
             v.world.hero.y = y;
             v.world.hero.radius = radius;
+            v.world.hero.heroState = onAir;
             printf("hero: x:%f, y:%f, radius:%f\n", v.world.hero.radius, v.world.hero.y, radius);
         }
         else if ("totallayer" == word)
@@ -195,19 +197,21 @@ void main4Texture()
     ViewTexture v;
 
     CreateViewTexture(v, "config.txt");
-    TextureData texD(6);
+    TextureData texD(7);
     v.texData = &texD;
     v.texData->decoders[0].Decode("grass3.png");
     v.texData->decoders[1].Decode("background2.png");
     v.texData->decoders[2].Decode("foreground2.png");
     v.texData->decoders[3].Decode("banana_l.png");
     v.texData->decoders[4].Decode("banana_r.png");
-    v.texData->decoders[5].Decode("banana_air.png");
+    v.texData->decoders[5].Decode("banana_air_l.png");
+    v.texData->decoders[6].Decode("banana_air_r.png");
     // 0: texture for obstacles
     // 1: background
     // 2: foreground
     // 3,4,5 -> hero left, hero right, hero on air
     float color[] = {
+        1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
