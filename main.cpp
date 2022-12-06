@@ -207,12 +207,14 @@ void main4Texture()
     v.texData->decoders[4].Decode("banana_r.png");
     v.texData->decoders[5].Decode("banana_air_l.png");
     v.texData->decoders[6].Decode("banana_air_r.png");
-    v.texData->decoders[7].Decode("menu_background.png");
-    v.texData->decoders[8].Decode("youwin_background.png");
+    v.texData->decoders[7].Decode("menu_background_white.png");
+    v.texData->decoders[8].Decode("youwin_background_white.png");
     // 0: texture for obstacles
     // 1: background
     // 2: foreground
-    // 3,4,5 -> hero left, hero right, hero on air
+    // 3,4 -> hero onland left, right
+    // 5,6 -> hero onair left, right
+    // 7,8 -> menu background, win background
     float color[] = {
         1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
@@ -265,8 +267,8 @@ void main4Texture()
                 c.UpdateGameStage(v.world);
                 break;
             case 2:
-                c.CheckKeyState();
                 v.RenderWin();
+                c.CheckKeyState();
                 break;
             default:
                 break;
