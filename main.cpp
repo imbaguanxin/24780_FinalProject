@@ -3,6 +3,7 @@
 #include "fssimplewindow.h"
 #include "Controller.hpp"
 #include "ViewTexture.hpp"
+#include "yssimplesound.h"
 #include "yspng.h"
 
 #include <fstream>
@@ -197,7 +198,7 @@ void main4Texture()
     ViewTexture v;
 
     CreateViewTexture(v, "config.txt");
-    TextureData texD(7);
+    TextureData texD(9);
     v.texData = &texD;
     v.texData->decoders[0].Decode("grass3.png");
     v.texData->decoders[1].Decode("background2.png");
@@ -206,11 +207,15 @@ void main4Texture()
     v.texData->decoders[4].Decode("banana_r.png");
     v.texData->decoders[5].Decode("banana_air_l.png");
     v.texData->decoders[6].Decode("banana_air_r.png");
+    v.texData->decoders[7].Decode("menu_background.png");
+    v.texData->decoders[8].Decode("youwin_background.png");
     // 0: texture for obstacles
     // 1: background
     // 2: foreground
     // 3,4,5 -> hero left, hero right, hero on air
     float color[] = {
+        1.0, 1.0, 1.0, 1.0,
+        1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
         1.0, 1.0, 1.0, 1.0,
@@ -224,13 +229,26 @@ void main4Texture()
     auto now = std::chrono::system_clock::now();
     auto next_now = std::chrono::system_clock::now();
     double time_interval = 0;
+    
+    YsSoundPlayer player;
+    YsSoundPlayer::SoundData wav;
+    if (YSOK != wav.LoadWav("bgm.wav"))
+    {
+        printf("Failed to load bgm.\n");
+        return;
+    }
 
     FsOpenWindow(16, 16, v.windowXLen, v.windowYLen, 1);
 
     Controller c;
     v.InitTexture();
+    player.Start();
+    player.PlayBackground(wav);
     while (!c.IsGameEnd())
-    {   
+    {
+        if (1 == player.IsPlaying(wav)) {
+            player.KeepPlaying();
+        }
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
         switch (c.gameStage) {
             case 0:

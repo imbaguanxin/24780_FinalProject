@@ -246,21 +246,51 @@ void ViewTexture::RenderGame(double intensity)
 
 void ViewTexture::RenderWelcome(void)
 {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    double x[] = {0.0, double(windowXLen), double(windowXLen), 0};
+    double y[] = {0.0, 0.0, double(windowYLen), double(windowYLen)};
+    double rgba[] = {1.0, 1.0, 1.0, 0.5};
+    DrawQuadTex(x, y, 7, rgba);
+    glDisable(GL_BLEND);
+    
+    glColor3ub(0,0,0);
+    char buffer[30];
     glRasterPos2d(windowXLen / 2 - 32 * 6, windowYLen / 4 + 10);
-    YsGlDrawFontBitmap32x48("Banana Jump!");
+    std::sprintf(buffer, "Banana Jump!");
+    YsGlDrawFontBitmap32x48(buffer);
+    
     glRasterPos2d(windowXLen / 2 - 16 * 12, windowYLen / 2 + 10);
-    YsGlDrawFontBitmap16x20("Jump: Space");
+    std::sprintf(buffer, "Jump: Space");
+    YsGlDrawFontBitmap16x20(buffer);
+    
     glRasterPos2d(windowXLen / 2 - 16 * 12, windowYLen / 2 + 40);
-    YsGlDrawFontBitmap16x20("Left arrow: move left");
+    std::sprintf(buffer, "Left arrow: move left");
+    YsGlDrawFontBitmap16x20(buffer);
+    
     glRasterPos2d(windowXLen / 2 - 16 * 12, windowYLen / 2 + 70);
-    YsGlDrawFontBitmap16x20("Right arrow: move right");
+    std::sprintf(buffer, "Right arrow: move right");
+    YsGlDrawFontBitmap16x20(buffer);
+    
     glRasterPos2d(windowXLen / 2 - 16 * 10, windowYLen / 4 * 3 + 10);
-    YsGlDrawFontBitmap16x20("Press Space to Start");
+    std::sprintf(buffer, "Press Space to Start");
+    YsGlDrawFontBitmap16x20(buffer);
+    
+    
 }
 
 void ViewTexture::RenderWin(void)
 {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    double x[] = {0.0, double(windowXLen), double(windowXLen), 0};
+    double y[] = {0.0, 0.0, double(windowYLen), double(windowYLen)};
+    double rgba[] = {1.0, 1.0, 1.0, 0.5};
+    glDisable(GL_BLEND);
+    DrawQuadTex(x, y, 7, rgba);
     glColor3ub(0, 0, 0);
-    glRasterPos2d(windowXLen / 2 - 16 * 4, windowYLen / 2 + 10);
-    YsGlDrawFontBitmap16x20("You Win!");
+    glRasterPos2d(windowXLen / 2 - 32 * 4, windowYLen / 2 + 10);
+    YsGlDrawFontBitmap32x48("You Win!");
+    
 }
