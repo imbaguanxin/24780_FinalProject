@@ -103,43 +103,43 @@ void ViewTexture::DrawBackground(int texId)
 void ViewTexture::DrawObstacleOne(Obstacle &obs, int texId)
 {
     double x_in[4] = {
-        W2CX(obs.GetX() + 0.5),
-        W2CX(obs.GetX() + obs.GetXlen() - 0.5),
-        W2CX(obs.GetX() + obs.GetXlen() - 0.5),
-        W2CX(obs.GetX() + 0.5)};
+        W2CX(obs.GetX() + 1),
+        W2CX(obs.GetX() + obs.GetXlen() - 1),
+        W2CX(obs.GetX() + obs.GetXlen() - 1),
+        W2CX(obs.GetX() + 1)};
     double y_in[] = {
         W2CY(obs.GetY()),
         W2CY(obs.GetY()),
-        W2CY(obs.GetY() + obs.GetYlen() - 0.5),
-        W2CY(obs.GetY() + obs.GetYlen() - 0.5)};
+        W2CY(obs.GetY() + obs.GetYlen() - 1),
+        W2CY(obs.GetY() + obs.GetYlen() - 1)};
     double x_left[] = {
         W2CX(obs.GetX()),
-        W2CX(obs.GetX() + 0.5),
-        W2CX(obs.GetX() + 0.5),
+        W2CX(obs.GetX() + 1),
+        W2CX(obs.GetX() + 1),
         W2CX(obs.GetX())};
     double y_left[] = {
         W2CY(obs.GetY()),
         W2CY(obs.GetY()),
-        W2CY(obs.GetY() + obs.GetYlen() - 0.5),
-        W2CY(obs.GetY() + obs.GetYlen() - 0.5)};
+        W2CY(obs.GetY() + obs.GetYlen() - 1),
+        W2CY(obs.GetY() + obs.GetYlen() - 1)};
     double x_right[] = {
-        W2CX(obs.GetX() + obs.GetXlen() - 0.5),
+        W2CX(obs.GetX() + obs.GetXlen() - 1),
         W2CX(obs.GetX() + obs.GetXlen()),
         W2CX(obs.GetX() + obs.GetXlen()),
-        W2CX(obs.GetX() + obs.GetXlen() - 0.5)};
+        W2CX(obs.GetX() + obs.GetXlen() - 1)};
     double y_right[] = {
         W2CY(obs.GetY()),
         W2CY(obs.GetY()),
-        W2CY(obs.GetY() + obs.GetYlen() - 0.5),
-        W2CY(obs.GetY() + obs.GetYlen() - 0.5)};
+        W2CY(obs.GetY() + obs.GetYlen() - 1),
+        W2CY(obs.GetY() + obs.GetYlen() - 1)};
     double x_top[] = {
         W2CX(obs.GetX()),
         W2CX(obs.GetX() + obs.GetXlen()),
         W2CX(obs.GetX() + obs.GetXlen()),
         W2CX(obs.GetX())};
     double y_top[] = {
-        W2CY(obs.GetY() + obs.GetYlen() - 0.5),
-        W2CY(obs.GetY() + obs.GetYlen() - 0.5),
+        W2CY(obs.GetY() + obs.GetYlen() - 1),
+        W2CY(obs.GetY() + obs.GetYlen() - 1),
         W2CY(obs.GetY() + obs.GetYlen()),
         W2CY(obs.GetY() + obs.GetYlen())};
     double rgba[] = {1.0, 1.0, 1.0, 1.0};

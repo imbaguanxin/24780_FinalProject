@@ -3,14 +3,14 @@ hero 50 30 3
 layersize 100 100
 totallayer 3
 layer 0
-obstacle 0 0 20.5 30
-obstacle 20 0 20.5 20
-obstacle 40 0 20.5 10
-obstacle 60 0 20.5 20
-obstacle 80 0 20 30
+obstacle 0 0 100 10
+obstacle 20 17 20 3
+obstacle 60 17 20 3
+obstacle 00 27 20 3
+obstacle 80 27 20 3
 obstacle 40 45 20 10
 obstacle 8.8 63 17.5 5
-obstacle 57 74 22 12
+obstacle 50 74 25 8
 obstacle 15.3 87.5 13.5 5
 layer 1
 obstacle 50 105 20 5
@@ -30,4 +30,4 @@ obstacle 60 275 40 3
 obstacle 30 275 10 3
 obstacle 0 270 5 3
 obstacle 20 290 20 3
-obstacle 50 290.5 10 2.5
+obstacle 46 290.5 14 2.5
